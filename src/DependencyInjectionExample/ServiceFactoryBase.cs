@@ -29,20 +29,15 @@
 
         public object GetService(Type serviceType)
         {
-            ServiceMetadata serviceMetadata;
-            if (!this.serviceTypeToMetadata.TryGetValue(serviceType, out serviceMetadata))
+            ServiceMetadata serviceMetadata = this.serviceTypeToMetadata[serviceType];
+            int length = serviceMetadata.ParameterTypes.Length;
+            object[] parameterServices = new object[length];
+            for (int i = 0; i < length; i++)
             {
-                return null;
+                parameterServices[i] = this.GetService(serviceMetadata.ParameterTypes[i]);
             }
 
-            List<object> parameterServices = new List<object>();
-            foreach (var paramType in serviceMetadata.ParameterTypes)
-            {
-                var parameterService = this.GetService(paramType);
-                parameterServices.Add(parameterService);
-            }
-
-            return serviceMetadata.NewObj(parameterServices.ToArray());
+            return serviceMetadata.NewObj(parameterServices);
         }
 
         public List<ServiceMetadata> GetServiceMetadatas()
