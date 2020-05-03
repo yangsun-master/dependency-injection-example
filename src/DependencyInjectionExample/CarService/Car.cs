@@ -14,7 +14,7 @@
         {
             this.engine = engine;
             this.controlPanel = controlPanel;
-            this.Name = "Black";
+            this.Name = "NoName";
         }
 
         public void Start()

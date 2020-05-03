@@ -6,10 +6,6 @@
 
     public class Engine : IEngine
     {
-        public Engine()
-        {
-        }
-
         public void Run()
         {
             Console.WriteLine("Engine is running.");

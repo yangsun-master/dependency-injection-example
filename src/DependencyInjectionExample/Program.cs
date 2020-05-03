@@ -30,6 +30,7 @@
             this.TestCar(car);
             car = this.CreateByLambdaExpression();
             this.TestCar(car);
+            this.assemblyCreater.Save();
 
         }
         private ICar CreateByLibrary()
@@ -67,6 +68,7 @@
             serviceFactory.AddService<IControlPanel, ControlPanel>();
             serviceFactory.AddService<IAirConditioner, AirConditioner>();
             serviceFactory.AddService<ICDPlayer, CDPlayer>();
+            this.assemblyCreater.CreateDynamicMethodCreaterType(serviceFactory.GetServiceMetadatas());
             ICar car = serviceFactory.GetService<ICar>();
             car.Name = "DynamicMethodCreated";
             return car;
@@ -81,6 +83,7 @@
             serviceFactory.AddService<IControlPanel, ControlPanel>();
             serviceFactory.AddService<IAirConditioner, AirConditioner>();
             serviceFactory.AddService<ICDPlayer, CDPlayer>();
+            this.assemblyCreater.CreateLambdaExpressionCreaterType(serviceFactory.GetServiceMetadatas());
             ICar car = serviceFactory.GetService<ICar>();
             car.Name = "LambdaExpressionCreated";
             return car;

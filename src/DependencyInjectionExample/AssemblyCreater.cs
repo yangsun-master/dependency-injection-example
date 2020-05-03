@@ -19,7 +19,7 @@
             this.moduleBuilder = this.assemblyBuilder.DefineDynamicModule("DynamicModule", "DynamicLibrary.dll");
         }
 
-        public void CreateILCreaterType(List<ServiceMetadata> serviceMetadatas)
+        public void CreateDynamicMethodCreaterType(List<ServiceMetadata> serviceMetadatas)
         {
             var typeBuilder = moduleBuilder.DefineType("DynamicLibrary.DynamicMethodCreater", TypeAttributes.Public);
             foreach (var serviceMetadata in serviceMetadatas)
@@ -46,9 +46,9 @@
             typeBuilder.CreateType();
         }
 
-        public void CreateExpressionCreaterType(List<ServiceMetadata> serviceMetadatas)
+        public void CreateLambdaExpressionCreaterType(List<ServiceMetadata> serviceMetadatas)
         {
-            var typeBuilder = moduleBuilder.DefineType("DynamicLibrary.ExpressionCreater", TypeAttributes.Public);
+            var typeBuilder = moduleBuilder.DefineType("DynamicLibrary.LambdaExpressionCreater", TypeAttributes.Public);
             foreach (var serviceMetadata in serviceMetadatas)
             {
                 var methodBuilder = typeBuilder.DefineMethod(
