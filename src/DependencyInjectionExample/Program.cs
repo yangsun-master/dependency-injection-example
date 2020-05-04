@@ -118,6 +118,7 @@
             serviceFactory.AddService<IControlPanel, ControlPanel>();
             serviceFactory.AddService<IAirConditioner, AirConditioner>();
             serviceFactory.AddService<ICDPlayer, CDPlayer>();
+            serviceFactory.Build();
         }
     }
 }

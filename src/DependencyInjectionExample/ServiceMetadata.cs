@@ -16,5 +16,10 @@
         public Type[] ParameterTypes { get; internal set; }
 
         public NewObjDelegate NewObj { get; internal set; }
+
+        public int ArgumentsLength { get; set; }
+
+        public object[] ArgumentArray { get; set; }
+        public ServiceMetadata[] ArgumentMetadataArray { get; set; }
     }
 }

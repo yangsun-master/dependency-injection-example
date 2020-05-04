@@ -15,11 +15,25 @@
             serviceMetadata.ImplType = typeof(TImpl);
             serviceMetadata.Constructor = serviceMetadata.ImplType.GetConstructors()[0];
             serviceMetadata.ParameterTypes = serviceMetadata.Constructor.GetParameters().Select(p => p.ParameterType).ToArray();
+            serviceMetadata.ArgumentsLength = serviceMetadata.ParameterTypes.Length;
+            serviceMetadata.ArgumentArray = new object[serviceMetadata.ArgumentsLength];
+            serviceMetadata.ArgumentMetadataArray = new ServiceMetadata[serviceMetadata.ArgumentsLength];
             serviceMetadata.NewObj = this.CreateDelegate(serviceMetadata);
             this.serviceTypeToMetadata.Add(serviceType, serviceMetadata);
         }
 
         public abstract NewObjDelegate CreateDelegate(ServiceMetadata serviceMetadata);
+
+        public void Build()
+        {
+            foreach (var serviceMetadata in this.serviceTypeToMetadata.Values)
+            {
+                for (int i = 0; i < serviceMetadata.ArgumentsLength; i++)
+                {
+                    serviceMetadata.ArgumentMetadataArray[i] = this.serviceTypeToMetadata[serviceMetadata.ParameterTypes[i]];
+                }
+            }
+        }
 
         public TService GetService<TService>() where TService : class
         {
@@ -30,14 +44,17 @@
         public object GetService(Type serviceType)
         {
             ServiceMetadata serviceMetadata = this.serviceTypeToMetadata[serviceType];
-            int length = serviceMetadata.ParameterTypes.Length;
-            object[] parameterServices = new object[length];
-            for (int i = 0; i < length; i++)
+            return this.GetService(serviceMetadata);
+        }
+
+        private object GetService(ServiceMetadata serviceMetadata)
+        {
+            for (int i = 0; i < serviceMetadata.ArgumentsLength; i++)
             {
-                parameterServices[i] = this.GetService(serviceMetadata.ParameterTypes[i]);
+                serviceMetadata.ArgumentArray[i] = this.GetService(serviceMetadata.ArgumentMetadataArray[i]);
             }
 
-            return serviceMetadata.NewObj(parameterServices);
+            return serviceMetadata.NewObj(serviceMetadata.ArgumentArray);
         }
 
         public List<ServiceMetadata> GetServiceMetadatas()
